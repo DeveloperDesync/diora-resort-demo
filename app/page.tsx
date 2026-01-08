@@ -4,14 +4,14 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { MOCK_VILLAS } from "@/lib/mock-data"
+import { MOCK_RESORTS } from "@/lib/mock-data"
 import { motion } from "framer-motion"
-import { ArrowRight, Leaf, Users, Sparkles, MapPin } from "lucide-react"
+import { ArrowRight, Leaf, Users, Sparkles, MapPin, Palmtree } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
 export default function HomePage() {
-  const featuredVillas = MOCK_VILLAS.filter((villa) => villa.featured).slice(0, 3)
+  const featuredResorts = MOCK_RESORTS.filter((resort) => resort.featured).slice(0, 3)
 
   return (
     <div className="min-h-screen">
@@ -22,7 +22,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background z-10" />
         <Image
           src="/luxury-beach-villa-sunset-ocean-view.jpg"
-          alt="Diora Resort"
+          alt="Antique, Philippines"
           fill
           className="object-cover"
           priority
@@ -34,15 +34,15 @@ export default function HomePage() {
           className="relative z-20 text-center px-4 max-w-4xl mx-auto"
         >
           <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold mb-6 text-balance text-foreground">
-            Where Luxury Meets Nature
+            Discover Antique, Philippines
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
-            Experience unparalleled luxury in our eco-conscious retreat, where every detail is crafted for your ultimate
-            comfort and peace.
+            Experience the beauty of Antique's pristine islands, waterfalls, and beaches. Book your perfect resort
+            getaway today.
           </p>
-          <Link href="/villas">
+          <Link href="/resorts">
             <Button size="lg" className="text-base px-8 py-6">
-              Reserve Your Stay
+              Explore Resorts
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>
@@ -58,33 +58,33 @@ export default function HomePage() {
           viewport={{ once: true }}
           className="max-w-3xl mx-auto text-center mb-16"
         >
-          <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6 text-balance">About Diora Resort</h2>
+          <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6 text-balance">About Diora Booking</h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Nestled on a pristine coastline, Diora Resort represents the pinnacle of sustainable luxury. Our collection
-            of exclusive villas combines contemporary design with deep respect for the natural environment, creating an
-            unforgettable sanctuary for discerning travelers.
+            Diora Booking is your gateway to Antique's most stunning destinations. From secluded island paradises to
+            adventure-filled mountain resorts, we connect you with the best accommodations across this beautiful
+            province. Experience authentic Filipino hospitality and natural wonders like nowhere else.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
           {[
             {
-              icon: Leaf,
-              title: "Sustainability",
+              icon: Palmtree,
+              title: "Island Paradise",
               description:
-                "Every aspect of our resort is designed with environmental consciousness, from renewable energy to locally sourced materials.",
+                "Discover pristine white-sand beaches, crystal-clear waters, and vibrant marine life on Antique's stunning islands.",
             },
             {
               icon: Users,
-              title: "Personalized Service",
+              title: "Authentic Experience",
               description:
-                "Our dedicated team ensures every moment of your stay exceeds expectations with bespoke concierge services.",
+                "Immerse yourself in local culture with warm Filipino hospitality and genuine connections with island communities.",
             },
             {
               icon: Sparkles,
-              title: "Exceptional Design",
+              title: "Diverse Destinations",
               description:
-                "Award-winning architecture seamlessly blends modern luxury with the raw beauty of our natural surroundings.",
+                "From beach resorts to mountain retreats, explore a variety of unique accommodations across Antique's municipalities.",
             },
           ].map((feature, index) => (
             <motion.div
@@ -118,19 +118,19 @@ export default function HomePage() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">The Resort Experience</h2>
+              <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">Explore Antique</h2>
               <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                At Diora Resort, we believe true luxury lies in the details. From the moment you arrive, you'll be
-                immersed in an environment where every element has been thoughtfully curated to create harmony between
-                comfort and nature.
+                Antique is a hidden gem in the Philippines, offering unspoiled natural beauty and adventures for every
+                type of traveler. From the famous Malumpati Cold Spring to the secluded islands of Nogas and Seco, every
+                destination tells a unique story.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-                Whether you're seeking adventure, relaxation, or meaningful connection, our resort offers endless
-                possibilities for discovery and renewal.
+                Whether you're seeking island-hopping adventures, waterfall trekking, diving in marine sanctuaries, or
+                simply relaxing on pristine beaches, Antique has it all.
               </p>
-              <Link href="/villas">
+              <Link href="/resorts">
                 <Button variant="outline" size="lg">
-                  Explore Our Villas
+                  Browse Resorts
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
@@ -145,7 +145,7 @@ export default function HomePage() {
             >
               <Image
                 src="/tropical-garden-villa-lush-greenery.jpg"
-                alt="Resort Experience"
+                alt="Antique Nature"
                 fill
                 className="object-cover"
               />
@@ -154,7 +154,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured Villas */}
+      {/* Featured Resorts */}
       <section className="container mx-auto px-4 lg:px-8 py-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -163,44 +163,46 @@ export default function HomePage() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">Featured Villas</h2>
+          <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">Featured Resorts</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Discover our curated selection of extraordinary residences, each offering a unique perspective on luxury
-            living.
+            Discover handpicked resorts across Antique, each offering unique experiences and authentic Filipino
+            hospitality.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {featuredVillas.map((villa, index) => (
+          {featuredResorts.map((resort, index) => (
             <motion.div
-              key={villa.id}
+              key={resort.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Link href={`/villas/${villa.slug}`}>
+              <Link href={`/resorts/${resort.slug}`}>
                 <Card className="group overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-500">
                   <div className="relative h-72 overflow-hidden">
                     <Image
-                      src={villa.images[0] || "/placeholder.svg"}
-                      alt={villa.name}
+                      src={resort.images[0] || "/placeholder.svg"}
+                      alt={resort.name}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                     <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm px-3 py-1 rounded-full">
-                      <p className="text-sm font-semibold">${villa.pricePerNight}/night</p>
+                      <p className="text-sm font-semibold">₱{resort.pricePerNight}/night</p>
                     </div>
                   </div>
                   <CardContent className="p-6">
-                    <h3 className="font-serif text-2xl font-semibold mb-2">{villa.name}</h3>
-                    <p className="text-muted-foreground mb-4 line-clamp-2 leading-relaxed">{villa.description}</p>
+                    <h3 className="font-serif text-2xl font-semibold mb-2">{resort.name}</h3>
+                    <p className="text-sm text-muted-foreground mb-3 flex items-center gap-1">
+                      <MapPin className="h-4 w-4" />
+                      {resort.municipality}
+                    </p>
+                    <p className="text-muted-foreground mb-4 line-clamp-2 leading-relaxed">{resort.description}</p>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <span>{villa.bedrooms} Beds</span>
+                      <span>{resort.rooms} Rooms</span>
                       <span>•</span>
-                      <span>{villa.bathrooms} Baths</span>
-                      <span>•</span>
-                      <span>{villa.capacity} Guests</span>
+                      <span>{resort.capacity} Capacity</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -210,9 +212,9 @@ export default function HomePage() {
         </div>
 
         <div className="text-center">
-          <Link href="/villas">
+          <Link href="/resorts">
             <Button variant="outline" size="lg">
-              View All Villas
+              View All Resorts
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>
@@ -232,24 +234,23 @@ export default function HomePage() {
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary-foreground/10 mb-8">
               <Leaf className="h-10 w-10" />
             </div>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6 text-balance">Sustainability & Community</h2>
+            <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6 text-balance">Eco-Tourism & Community</h2>
             <p className="text-lg leading-relaxed mb-8 opacity-90">
-              We are committed to operating in harmony with our environment and supporting local communities. From
-              solar-powered facilities to partnering with local artisans and suppliers, every decision we make considers
-              our impact on the planet and its people.
+              We partner with resorts committed to sustainable tourism and supporting local communities. By choosing
+              Diora Booking, you contribute to preserving Antique's natural beauty and empowering local families.
             </p>
             <div className="flex flex-wrap gap-8 justify-center text-center">
               <div>
-                <p className="text-3xl font-bold mb-2">100%</p>
-                <p className="text-sm opacity-90">Renewable Energy</p>
-              </div>
-              <div>
-                <p className="text-3xl font-bold mb-2">Zero</p>
-                <p className="text-sm opacity-90">Single-Use Plastics</p>
+                <p className="text-3xl font-bold mb-2">5+</p>
+                <p className="text-sm opacity-90">Partner Resorts</p>
               </div>
               <div>
                 <p className="text-3xl font-bold mb-2">Local</p>
-                <p className="text-sm opacity-90">Sourcing Priority</p>
+                <p className="text-sm opacity-90">Community Focus</p>
+              </div>
+              <div>
+                <p className="text-3xl font-bold mb-2">Eco</p>
+                <p className="text-sm opacity-90">Conscious Travel</p>
               </div>
             </div>
           </motion.div>
@@ -266,14 +267,14 @@ export default function HomePage() {
           className="max-w-3xl mx-auto text-center"
         >
           <MapPin className="h-12 w-12 text-primary mx-auto mb-6" />
-          <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">Begin Your Journey</h2>
+          <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">Start Your Antique Adventure</h2>
           <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-            Discover a new definition of luxury at Diora Resort. Reserve your villa today and experience the perfect
-            balance of sophistication and serenity.
+            From pristine beaches to mountain waterfalls, Antique awaits. Book your dream resort today and discover why
+            this hidden paradise is the Philippines' best-kept secret.
           </p>
-          <Link href="/villas">
+          <Link href="/resorts">
             <Button size="lg" className="text-base px-8 py-6">
-              Explore Available Villas
+              Explore Resorts
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>

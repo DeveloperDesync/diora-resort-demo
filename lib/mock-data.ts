@@ -1,12 +1,13 @@
-export interface Villa {
+export interface Resort {
   id: string
   name: string
   slug: string
+  location: string
+  municipality: string
   description: string
   longDescription: string
   capacity: number
-  bedrooms: number
-  bathrooms: number
+  rooms: number
   pricePerNight: number
   images: string[]
   amenities: string[]
@@ -16,8 +17,8 @@ export interface Villa {
 
 export interface Reservation {
   id: string
-  villaId: string
-  villaName: string
+  resortId: string
+  resortName: string
   guestName: string
   guestEmail: string
   checkIn: string
@@ -28,191 +29,205 @@ export interface Reservation {
   createdAt: string
 }
 
-export const MOCK_VILLAS: Villa[] = [
+export interface AdminUser {
+  id: string
+  email: string
+  name: string
+  role: "admin"
+  resortIds: string[]
+  createdAt: string
+}
+
+export const MOCK_RESORTS: Resort[] = [
   {
     id: "1",
-    name: "Sunset Villa",
-    slug: "sunset-villa",
-    description: "A serene oceanfront retreat with panoramic sunset views",
+    name: "Diora Resort",
+    slug: "diora-resort",
+    location: "Tibiao Riverview, Tibiao",
+    municipality: "Tibiao",
+    description: "Our flagship luxury resort offering world-class amenities and service",
     longDescription:
-      "Experience the ultimate in luxury living with our signature Sunset Villa. This stunning retreat features floor-to-ceiling windows that frame breathtaking ocean views, a private infinity pool, and direct beach access. The interior blends contemporary design with natural materials, creating a harmonious space that celebrates both comfort and style.",
-    capacity: 4,
-    bedrooms: 2,
-    bathrooms: 2,
-    pricePerNight: 850,
+      "Diora Resort is our premier destination, combining contemporary luxury with authentic Filipino hospitality. Nestled along the scenic Tibiao River, this flagship property features state-of-the-art facilities, gourmet dining, infinity pools, and spacious villas designed for the discerning traveler. Experience the pinnacle of resort excellence in the heart of Antique.",
+    capacity: 80,
+    rooms: 25,
+    pricePerNight: 5500,
     images: [
       "/luxury-beach-villa-sunset-ocean-view.jpg",
+      "/infinity-pool-cliff-ocean-view.jpg",
+      "/luxury-villa-living-room-nature.jpg",
       "/modern-villa-bedroom-ocean-view.jpg",
-      "/luxury-outdoor-pool-tropical.jpg",
-      "/elegant-bathroom-spa-luxury.jpg",
     ],
     amenities: [
-      "Private infinity pool",
-      "Ocean view terrace",
-      "Outdoor shower",
-      "Smart home system",
-      "High-speed WiFi",
-      "Espresso machine",
-      "Beach access",
-      "Daily housekeeping",
+      "Infinity pool",
+      "Fine dining restaurant",
+      "Spa & wellness center",
+      "Fitness center",
+      "Business center",
+      "Free high-speed WiFi",
+      "Concierge service",
+      "Airport transfers",
+      "River activities",
+      "Conference facilities",
     ],
     featured: true,
     availability: "available",
   },
   {
     id: "2",
-    name: "Garden House",
-    slug: "garden-house",
-    description: "Nestled in lush tropical gardens with ultimate privacy",
+    name: "Malumpati Eco Resort",
+    slug: "malumpati-eco-resort",
+    location: "Malumpati Cold Spring, Pandan",
+    municipality: "Pandan",
+    description: "Nestled by crystal-clear spring waters in the heart of nature",
     longDescription:
-      "Surrounded by verdant tropical gardens, the Garden House offers a peaceful sanctuary where nature and luxury intertwine. This spacious residence features an open-plan living area, a gourmet kitchen, and a private garden with an outdoor pavilion perfect for alfresco dining.",
-    capacity: 6,
-    bedrooms: 3,
-    bathrooms: 3,
-    pricePerNight: 1200,
+      "Experience eco-luxury at its finest at Malumpati Eco Resort, located beside the famous cold spring. This sustainable paradise offers modern amenities while preserving the natural beauty of Antique. Perfect for nature lovers and adventure seekers who appreciate pristine waters and lush tropical surroundings.",
+    capacity: 50,
+    rooms: 15,
+    pricePerNight: 3500,
     images: [
+      "/luxury-outdoor-pool-tropical.jpg",
       "/tropical-garden-villa-lush-greenery.jpg",
-      "/luxury-villa-living-room-nature.jpg",
-      "/outdoor-dining-pavilion-tropical.jpg",
-      "/master-bedroom-garden-view.jpg",
+      "/modern-villa-bedroom-ocean-view.jpg",
+      "/elegant-bathroom-spa-luxury.jpg",
     ],
     amenities: [
-      "Private garden",
-      "Outdoor pavilion",
-      "Gourmet kitchen",
-      "Wine cellar",
-      "Library",
-      "Yoga deck",
-      "BBQ area",
-      "Concierge service",
+      "Spring water pool",
+      "Nature trails",
+      "Restaurant & bar",
+      "Conference room",
+      "Free WiFi",
+      "Kayaking",
+      "Guided tours",
+      "Organic garden",
     ],
     featured: true,
     availability: "available",
   },
   {
     id: "3",
-    name: "Cliff Residence",
-    slug: "cliff-residence",
-    description: "Dramatic cliffside location with unobstructed ocean panoramas",
+    name: "Seco Island Beach Resort",
+    slug: "seco-island-beach-resort",
+    location: "Seco Island, Tibiao",
+    municipality: "Tibiao",
+    description: "Private island paradise with pristine white sand beaches",
     longDescription:
-      "Perched on a dramatic clifftop, this architectural masterpiece offers unparalleled views of the endless ocean horizon. The Cliff Residence combines bold contemporary design with sustainable materials, featuring expansive terraces, a heated infinity pool, and interiors that blur the boundaries between indoor and outdoor living.",
-    capacity: 8,
-    bedrooms: 4,
-    bathrooms: 4,
-    pricePerNight: 1800,
+      "Escape to Seco Island Beach Resort, an exclusive island getaway with powdery white sand and crystal-clear turquoise waters. This boutique resort offers luxury accommodations with stunning ocean views, perfect for romantic getaways, family vacations, or peaceful retreats from the modern world.",
+    capacity: 40,
+    rooms: 12,
+    pricePerNight: 4200,
     images: [
-      "/cliffside-modern-villa-ocean-panorama.jpg",
-      "/infinity-pool-cliff-ocean-view.jpg",
-      "/contemporary-living-space-ocean.jpg",
-      "/luxury-terrace-sunset-ocean.jpg",
+      "/luxury-beach-villa-sunset-ocean-view.jpg",
+      "/outdoor-dining-pavilion-tropical.jpg",
+      "/cozy-bedroom-beach-view.jpg",
+      "/outdoor-deck-beachfront.jpg",
     ],
     amenities: [
-      "Heated infinity pool",
-      "Private gym",
-      "Home theater",
-      "Wine bar",
-      "Multiple terraces",
-      "Butler service",
-      "Private chef available",
-      "Helipad access",
+      "Private beach",
+      "Island hopping tours",
+      "Snorkeling equipment",
+      "Beachfront dining",
+      "Sunset bar",
+      "Water sports",
+      "Spa services",
+      "Bonfire nights",
     ],
     featured: true,
     availability: "available",
   },
   {
     id: "4",
-    name: "Beach Bungalow",
-    slug: "beach-bungalow",
-    description: "Intimate beachfront escape steps from the shore",
+    name: "Nogas Island Resort",
+    slug: "nogas-island-resort",
+    location: "Nogas Island, Anini-y",
+    municipality: "Anini-y",
+    description: "Secluded island sanctuary with breathtaking marine biodiversity",
     longDescription:
-      "Experience barefoot luxury in our charming Beach Bungalow, located just steps from pristine white sands. This intimate retreat features natural wood finishes, ocean-inspired decor, and a private deck perfect for morning coffee or sunset cocktails.",
-    capacity: 2,
-    bedrooms: 1,
-    bathrooms: 1,
-    pricePerNight: 550,
+      "Discover Nogas Island Resort, a hidden gem surrounded by vibrant coral reefs and teeming marine life. This eco-conscious resort combines rustic charm with modern comfort, offering an authentic island experience. Ideal for divers, snorkelers, and those seeking tranquility away from crowds.",
+    capacity: 30,
+    rooms: 10,
+    pricePerNight: 3800,
     images: [
       "/beach-bungalow-tropical-sand.jpg",
-      "/cozy-bedroom-beach-view.jpg",
-      "/outdoor-deck-beachfront.jpg",
-      "/placeholder.svg?height=800&width=1200",
+      "/infinity-pool-cliff-ocean-view.jpg",
+      "/luxury-villa-living-room-nature.jpg",
+      "/master-bedroom-garden-view.jpg",
     ],
     amenities: [
-      "Direct beach access",
-      "Private deck",
-      "Outdoor shower",
-      "Hammock",
-      "Kitchenette",
-      "Beach equipment",
-      "Daily breakfast",
-      "Bicycle rental",
-    ],
-    featured: false,
-    availability: "available",
-  },
-  {
-    id: "5",
-    name: "Forest Retreat",
-    slug: "forest-retreat",
-    description: "Secluded rainforest hideaway with natural pool",
-    longDescription:
-      "Immerse yourself in nature at the Forest Retreat, a secluded haven tucked into lush rainforest. This eco-luxury residence features sustainable design, a natural spring-fed pool, and expansive windows that invite the forest inside.",
-    capacity: 4,
-    bedrooms: 2,
-    bathrooms: 2,
-    pricePerNight: 950,
-    images: [
-      "/placeholder.svg?height=800&width=1200",
-      "/placeholder.svg?height=800&width=1200",
-      "/placeholder.svg?height=800&width=1200",
-      "/placeholder.svg?height=800&width=1200",
-    ],
-    amenities: [
-      "Natural pool",
-      "Forest trails",
-      "Outdoor bath",
-      "Fireplace",
-      "Meditation space",
-      "Organic minibar",
-      "Bird watching deck",
-      "Spa treatments",
-    ],
-    featured: false,
-    availability: "reserved",
-  },
-  {
-    id: "6",
-    name: "Hilltop Haven",
-    slug: "hilltop-haven",
-    description: "Elevated sanctuary with 360-degree island views",
-    longDescription:
-      "Crown jewel of Diora Resort, the Hilltop Haven sits at the highest point of the property, offering breathtaking 360-degree views. This luxurious estate features multiple living areas, a spectacular infinity pool, and wraparound terraces perfect for entertaining.",
-    capacity: 10,
-    bedrooms: 5,
-    bathrooms: 5,
-    pricePerNight: 2500,
-    images: [
-      "/placeholder.svg?height=800&width=1200",
-      "/placeholder.svg?height=800&width=1200",
-      "/placeholder.svg?height=800&width=1200",
-      "/placeholder.svg?height=800&width=1200",
-    ],
-    amenities: [
-      "Multiple infinity pools",
-      "Private spa",
-      "Professional kitchen",
-      "Wine cellar",
-      "Game room",
-      "Office space",
-      "Staff quarters",
-      "Full concierge team",
+      "Diving center",
+      "Marine sanctuary access",
+      "Native cottages",
+      "Fresh seafood restaurant",
+      "Generator power",
+      "Solar lighting",
+      "Fishing trips",
+      "Stargazing deck",
     ],
     featured: true,
     availability: "available",
   },
+  {
+    id: "5",
+    name: "Bugtong Bato Falls Resort",
+    slug: "bugtong-bato-falls-resort",
+    location: "Bugtong Bato Falls, Tibiao",
+    municipality: "Tibiao",
+    description: "Adventure resort nestled by majestic seven-tiered waterfalls",
+    longDescription:
+      "Bugtong Bato Falls Resort offers an exhilarating mountain escape beside the spectacular seven-tiered waterfalls. This adventure-focused resort is perfect for thrill-seekers, featuring zip-lining, river trekking, and bamboo rafting, while providing comfortable accommodations surrounded by lush rainforest.",
+    capacity: 60,
+    rooms: 20,
+    pricePerNight: 2800,
+    images: [
+      "/cliffside-modern-villa-ocean-panorama.jpg",
+      "/contemporary-living-space-ocean.jpg",
+      "/luxury-terrace-sunset-ocean.jpg",
+      "/tropical-garden-villa-lush-greenery.jpg",
+    ],
+    amenities: [
+      "Waterfall access",
+      "Zip line",
+      "River tubing",
+      "Trekking trails",
+      "Native restaurant",
+      "Camp fire area",
+      "Adventure guides",
+      "Photography tours",
+    ],
+    featured: false,
+    availability: "available",
+  },
+  {
+    id: "6",
+    name: "Mararison Island Resort",
+    slug: "mararison-island-resort",
+    location: "Mararison Island, Culasi",
+    municipality: "Culasi",
+    description: "Rustic beach resort on the 'Little Boracay' of Antique",
+    longDescription:
+      "Mararison Island Resort brings you back to basics with its laid-back island vibe and stunning sunsets. Known as the 'Little Boracay,' this island offers pristine beaches, gentle waves, and a peaceful atmosphere. Perfect for budget-conscious travelers seeking authentic island life without sacrificing comfort.",
+    capacity: 35,
+    rooms: 12,
+    pricePerNight: 2200,
+    images: [
+      "/luxury-beach-villa-sunset-ocean-view.jpg",
+      "/beach-bungalow-tropical-sand.jpg",
+      "/outdoor-deck-beachfront.jpg",
+      "/cozy-bedroom-beach-view.jpg",
+    ],
+    amenities: [
+      "Beachfront location",
+      "Local cuisine",
+      "Sunset viewpoint",
+      "Island tour guides",
+      "Hammocks",
+      "Volleyball court",
+      "Basic WiFi",
+      "Fishing equipment",
+    ],
+    featured: false,
+    availability: "available",
+  },
 ]
-
-// Initialize with empty reservations array
-// const mockReservations: Reservation[] = []
 
 export function getMockReservations(): Reservation[] {
   if (typeof window === "undefined") return []
@@ -249,11 +264,61 @@ export function cancelMockReservation(id: string): boolean {
   return false
 }
 
-export function updateVillaAvailability(villaId: string, status: "available" | "reserved" | "blocked"): boolean {
-  const villa = MOCK_VILLAS.find((v) => v.id === villaId)
-  if (villa) {
-    villa.availability = status
+export function updateResortAvailability(resortId: string, status: "available" | "reserved" | "blocked"): boolean {
+  const resort = MOCK_RESORTS.find((r) => r.id === resortId)
+  if (resort) {
+    resort.availability = status
     return true
   }
   return false
 }
+
+export function getMockAdmins(): AdminUser[] {
+  if (typeof window === "undefined") return []
+  const stored = localStorage.getItem("diora_admins")
+  return stored ? JSON.parse(stored) : []
+}
+
+export function addMockAdmin(admin: Omit<AdminUser, "id" | "createdAt">): AdminUser {
+  const newAdmin: AdminUser = {
+    ...admin,
+    id: `ADM-${Date.now()}`,
+    createdAt: new Date().toISOString(),
+  }
+
+  const existing = getMockAdmins()
+  existing.push(newAdmin)
+  if (typeof window !== "undefined") {
+    localStorage.setItem("diora_admins", JSON.stringify(existing))
+  }
+
+  return newAdmin
+}
+
+export function updateMockAdmin(id: string, updates: Partial<Omit<AdminUser, "id" | "createdAt">>): boolean {
+  const admins = getMockAdmins()
+  const index = admins.findIndex((a) => a.id === id)
+  if (index !== -1) {
+    admins[index] = { ...admins[index], ...updates }
+    if (typeof window !== "undefined") {
+      localStorage.setItem("diora_admins", JSON.stringify(admins))
+    }
+    return true
+  }
+  return false
+}
+
+export function deleteMockAdmin(id: string): boolean {
+  const admins = getMockAdmins()
+  const filtered = admins.filter((a) => a.id !== id)
+  if (filtered.length !== admins.length) {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("diora_admins", JSON.stringify(filtered))
+    }
+    return true
+  }
+  return false
+}
+
+export const MOCK_VILLAS = MOCK_RESORTS
+export const updateVillaAvailability = updateResortAvailability

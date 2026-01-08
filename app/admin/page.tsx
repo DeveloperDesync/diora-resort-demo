@@ -6,7 +6,7 @@ import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { getMockReservations, MOCK_VILLAS, updateVillaAvailability, addMockReservation } from "@/lib/mock-data"
+import { getMockReservations, MOCK_RESORTS, updateResortAvailability, addMockReservation } from "@/lib/mock-data"
 import { useAuth } from "@/lib/auth-context"
 import { motion } from "framer-motion"
 import { Calendar, Home, Plus, Lock, Unlock, Ban } from "lucide-react"
@@ -17,11 +17,11 @@ export default function AdminPage() {
   const router = useRouter()
   const { user, isAuthenticated } = useAuth()
   const [reservations, setReservations] = useState<any[]>([])
-  const [villas, setVillas] = useState(MOCK_VILLAS)
+  const [resorts, setResorts] = useState(MOCK_RESORTS)
   const [showCreateForm, setShowCreateForm] = useState(false)
 
   // Create reservation form state
-  const [selectedVillaId, setSelectedVillaId] = useState("")
+  const [selectedResortId, setSelectedResortId] = useState("")
   const [checkIn, setCheckIn] = useState("")
   const [checkOut, setCheckOut] = useState("")
   const [guestName, setGuestName] = useState("")
@@ -48,26 +48,26 @@ export default function AdminPage() {
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange)
   }, [user])
 
-  const handleVillaStatusChange = (villaId: string, status: "available" | "reserved" | "blocked") => {
-    updateVillaAvailability(villaId, status)
-    setVillas([...MOCK_VILLAS])
+  const handleResortStatusChange = (resortId: string, status: "available" | "reserved" | "blocked") => {
+    updateResortAvailability(resortId, status)
+    setResorts([...MOCK_RESORTS])
   }
 
   const handleCreateReservation = () => {
-    if (!selectedVillaId || !checkIn || !checkOut || !guestName || !guestEmail) {
+    if (!selectedResortId || !checkIn || !checkOut || !guestName || !guestEmail) {
       alert("Please fill in all fields")
       return
     }
 
-    const villa = MOCK_VILLAS.find((v) => v.id === selectedVillaId)
-    if (!villa) return
+    const resort = MOCK_RESORTS.find((r) => r.id === selectedResortId)
+    if (!resort) return
 
     const nights = Math.ceil((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24))
-    const totalPrice = villa.pricePerNight * nights
+    const totalPrice = resort.pricePerNight * nights
 
     addMockReservation({
-      villaId: villa.id,
-      villaName: villa.name,
+      resortId: resort.id,
+      resortName: resort.name,
       guestName,
       guestEmail,
       checkIn,
@@ -80,7 +80,7 @@ export default function AdminPage() {
     setReservations(getMockReservations())
     setShowCreateForm(false)
 
-    setSelectedVillaId("")
+    setSelectedResortId("")
     setCheckIn("")
     setCheckOut("")
     setGuestName("")
@@ -100,19 +100,19 @@ export default function AdminPage() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <div className="mb-8">
             <h1 className="font-serif text-4xl font-bold mb-2">Admin Dashboard</h1>
-            <p className="text-muted-foreground">Manage reservations, villas, and availability</p>
+            <p className="text-muted-foreground">Manage reservations, resorts, and availability</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             {[
               { label: "Total Reservations", value: reservations.length, icon: Calendar },
               {
-                label: "Available Villas",
-                value: villas.filter((v) => v.availability === "available").length,
+                label: "Available Resorts",
+                value: resorts.filter((r) => r.availability === "available").length,
                 icon: Home,
               },
-              { label: "Reserved", value: villas.filter((v) => v.availability === "reserved").length, icon: Lock },
-              { label: "Blocked", value: villas.filter((v) => v.availability === "blocked").length, icon: Ban },
+              { label: "Reserved", value: resorts.filter((r) => r.availability === "reserved").length, icon: Lock },
+              { label: "Blocked", value: resorts.filter((r) => r.availability === "blocked").length, icon: Ban },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -145,7 +145,7 @@ export default function AdminPage() {
           <Tabs defaultValue="reservations" className="space-y-6">
             <TabsList>
               <TabsTrigger value="reservations">Reservations</TabsTrigger>
-              <TabsTrigger value="villas">Villa Management</TabsTrigger>
+              <TabsTrigger value="resorts">Resort Management</TabsTrigger>
             </TabsList>
 
             <TabsContent value="reservations" className="space-y-6">
@@ -171,16 +171,16 @@ export default function AdminPage() {
                     <CardContent className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-medium mb-2">Villa</label>
+                          <label className="block text-sm font-medium mb-2">Resort</label>
                           <select
-                            value={selectedVillaId}
-                            onChange={(e) => setSelectedVillaId(e.target.value)}
+                            value={selectedResortId}
+                            onChange={(e) => setSelectedResortId(e.target.value)}
                             className="w-full px-4 py-3 border border-input rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-ring"
                           >
-                            <option value="">Select a villa</option>
-                            {villas.map((villa) => (
-                              <option key={villa.id} value={villa.id}>
-                                {villa.name} (${villa.pricePerNight}/night)
+                            <option value="">Select a resort</option>
+                            {resorts.map((resort) => (
+                              <option key={resort.id} value={resort.id}>
+                                {resort.name} (₱{resort.pricePerNight.toLocaleString()}/night)
                               </option>
                             ))}
                           </select>
@@ -275,8 +275,8 @@ export default function AdminPage() {
                               <p className="font-mono text-sm font-semibold">{reservation.id}</p>
                             </div>
                             <div>
-                              <p className="text-sm text-muted-foreground mb-1">Villa</p>
-                              <p className="font-medium">{reservation.villaName}</p>
+                              <p className="text-sm text-muted-foreground mb-1">Resort</p>
+                              <p className="font-medium">{reservation.resortName}</p>
                             </div>
                             <div>
                               <p className="text-sm text-muted-foreground mb-1">Guest</p>
@@ -296,7 +296,7 @@ export default function AdminPage() {
                             </div>
                             <div className="text-right">
                               <p className="text-sm text-muted-foreground mb-1">Total</p>
-                              <p className="text-lg font-semibold">${reservation.totalPrice}</p>
+                              <p className="text-lg font-semibold">₱{reservation.totalPrice.toLocaleString()}</p>
                             </div>
                           </div>
                         </CardContent>
@@ -307,40 +307,40 @@ export default function AdminPage() {
               )}
             </TabsContent>
 
-            <TabsContent value="villas" className="space-y-6">
-              <h2 className="font-serif text-2xl font-semibold">Villa Availability Management</h2>
+            <TabsContent value="resorts" className="space-y-6">
+              <h2 className="font-serif text-2xl font-semibold">Resort Availability Management</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {villas.map((villa, index) => (
+                {resorts.map((resort, index) => (
                   <motion.div
-                    key={villa.id}
+                    key={resort.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: index * 0.1 }}
                   >
                     <Card className="hover:shadow-lg transition-all duration-300">
                       <CardContent className="p-6">
-                        <h3 className="font-serif text-xl font-semibold mb-2">{villa.name}</h3>
+                        <h3 className="font-serif text-xl font-semibold mb-2">{resort.name}</h3>
                         <div className="space-y-3 mb-6">
                           <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">Price</span>
-                            <span className="font-medium">${villa.pricePerNight}/night</span>
+                            <span className="font-medium">₱{resort.pricePerNight.toLocaleString()}/night</span>
                           </div>
                           <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">Capacity</span>
-                            <span className="font-medium">{villa.capacity} guests</span>
+                            <span className="font-medium">{resort.capacity} guests</span>
                           </div>
                           <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">Status</span>
                             <span
                               className={`font-medium capitalize ${
-                                villa.availability === "available"
+                                resort.availability === "available"
                                   ? "text-primary"
-                                  : villa.availability === "reserved"
+                                  : resort.availability === "reserved"
                                     ? "text-destructive"
                                     : "text-muted-foreground"
                               }`}
                             >
-                              {villa.availability}
+                              {resort.availability}
                             </span>
                           </div>
                         </div>
@@ -348,8 +348,8 @@ export default function AdminPage() {
                           <p className="text-sm font-medium mb-2">Change Status:</p>
                           <div className="flex gap-2 flex-wrap">
                             <Button
-                              onClick={() => handleVillaStatusChange(villa.id, "available")}
-                              variant={villa.availability === "available" ? "default" : "outline"}
+                              onClick={() => handleResortStatusChange(resort.id, "available")}
+                              variant={resort.availability === "available" ? "default" : "outline"}
                               size="sm"
                               className="flex-1"
                             >
@@ -357,8 +357,8 @@ export default function AdminPage() {
                               Available
                             </Button>
                             <Button
-                              onClick={() => handleVillaStatusChange(villa.id, "reserved")}
-                              variant={villa.availability === "reserved" ? "default" : "outline"}
+                              onClick={() => handleResortStatusChange(resort.id, "reserved")}
+                              variant={resort.availability === "reserved" ? "default" : "outline"}
                               size="sm"
                               className="flex-1"
                             >
@@ -366,8 +366,8 @@ export default function AdminPage() {
                               Reserved
                             </Button>
                             <Button
-                              onClick={() => handleVillaStatusChange(villa.id, "blocked")}
-                              variant={villa.availability === "blocked" ? "default" : "outline"}
+                              onClick={() => handleResortStatusChange(resort.id, "blocked")}
+                              variant={resort.availability === "blocked" ? "default" : "outline"}
                               size="sm"
                               className="flex-1"
                             >

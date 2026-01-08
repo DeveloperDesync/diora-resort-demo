@@ -17,8 +17,8 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: "Diora Resort - Luxury Eco-Conscious Retreat",
-  description: "Experience unparalleled luxury in harmony with nature at Diora Resort",
+  title: "Diora Booking - Discover Resorts Across Antique, Philippines",
+  description: "Book luxury and eco-friendly resorts across Antique, Philippines with Diora Booking",
   generator: "v0.app",
   icons: {
     icon: [

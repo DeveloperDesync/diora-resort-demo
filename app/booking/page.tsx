@@ -5,7 +5,7 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { MOCK_VILLAS, addMockReservation } from "@/lib/mock-data"
+import { MOCK_RESORTS, addMockReservation } from "@/lib/mock-data"
 import { useAuth } from "@/lib/auth-context"
 import { motion, AnimatePresence } from "framer-motion"
 import { Calendar, User, FileText, CheckCircle, ArrowRight, ArrowLeft } from "lucide-react"
@@ -20,10 +20,9 @@ export default function BookingPage() {
   const router = useRouter()
   const { user, isAuthenticated } = useAuth()
   const [currentStep, setCurrentStep] = useState<BookingStep>("dates")
-  const [selectedVillaId, setSelectedVillaId] = useState<string | null>(null)
+  const [selectedResortId, setSelectedResortId] = useState<string | null>(null)
   const [confirmationId, setConfirmationId] = useState<string>("")
 
-  // Booking data
   const [checkIn, setCheckIn] = useState<string>(format(addDays(new Date(), 1), "yyyy-MM-dd"))
   const [checkOut, setCheckOut] = useState<string>(format(addDays(new Date(), 4), "yyyy-MM-dd"))
   const [numberOfGuests, setNumberOfGuests] = useState(2)
@@ -33,9 +32,9 @@ export default function BookingPage() {
   const [specialRequests, setSpecialRequests] = useState("")
 
   useEffect(() => {
-    const villaId = searchParams.get("villa")
-    if (villaId) {
-      setSelectedVillaId(villaId)
+    const resortId = searchParams.get("resort") || searchParams.get("villa") // Support both for backwards compatibility
+    if (resortId) {
+      setSelectedResortId(resortId)
     }
     if (user) {
       setGuestName(user.name)
@@ -43,13 +42,13 @@ export default function BookingPage() {
     }
   }, [searchParams, user])
 
-  const selectedVilla = selectedVillaId ? MOCK_VILLAS.find((v) => v.id === selectedVillaId) : null
+  const selectedResort = selectedResortId ? MOCK_RESORTS.find((r) => r.id === selectedResortId) : null
   const nights = differenceInDays(new Date(checkOut), new Date(checkIn))
-  const totalPrice = selectedVilla ? selectedVilla.pricePerNight * nights : 0
+  const totalPrice = selectedResort ? selectedResort.pricePerNight * nights : 0
 
   const handleNext = () => {
     if (!isAuthenticated && currentStep === "dates") {
-      router.push("/login?redirect=/booking" + (selectedVillaId ? `?villa=${selectedVillaId}` : ""))
+      router.push("/login?redirect=/booking" + (selectedResortId ? `?resort=${selectedResortId}` : ""))
       return
     }
 
@@ -69,11 +68,11 @@ export default function BookingPage() {
   }
 
   const handleConfirmBooking = () => {
-    if (!selectedVilla || !user) return
+    if (!selectedResort || !user) return
 
     const reservation = addMockReservation({
-      villaId: selectedVilla.id,
-      villaName: selectedVilla.name,
+      resortId: selectedResort.id,
+      resortName: selectedResort.name,
       guestName,
       guestEmail,
       checkIn,
@@ -90,9 +89,9 @@ export default function BookingPage() {
   const canProceed = () => {
     switch (currentStep) {
       case "dates":
-        return selectedVilla && checkIn && checkOut && new Date(checkOut) > new Date(checkIn)
+        return selectedResort && checkIn && checkOut && new Date(checkOut) > new Date(checkIn)
       case "guests":
-        return numberOfGuests > 0 && (!selectedVilla || numberOfGuests <= selectedVilla.capacity)
+        return numberOfGuests > 0 && (!selectedResort || numberOfGuests <= selectedResort.capacity)
       case "details":
         return guestName && guestEmail && guestPhone
       case "review":
@@ -102,16 +101,16 @@ export default function BookingPage() {
     }
   }
 
-  if (!selectedVilla) {
+  if (!selectedResort) {
     return (
       <div className="min-h-screen">
         <Header />
         <main className="container mx-auto px-4 lg:px-8 pt-24 pb-16">
           <Card>
             <CardContent className="p-12 text-center">
-              <h2 className="font-serif text-2xl font-semibold mb-4">No Villa Selected</h2>
-              <p className="text-muted-foreground mb-6">Please select a villa to continue with your booking.</p>
-              <Button onClick={() => router.push("/villas")}>Browse Villas</Button>
+              <h2 className="font-serif text-2xl font-semibold mb-4">No Resort Selected</h2>
+              <p className="text-muted-foreground mb-6">Please select a resort to continue with your booking.</p>
+              <Button onClick={() => router.push("/resorts")}>Browse Resorts</Button>
             </CardContent>
           </Card>
         </main>
@@ -228,20 +227,20 @@ export default function BookingPage() {
                     <CardContent className="space-y-6">
                       <div>
                         <label className="block text-sm font-medium mb-2">
-                          Guests (Maximum: {selectedVilla.capacity})
+                          Guests (Maximum: {selectedResort.capacity})
                         </label>
                         <input
                           type="number"
                           value={numberOfGuests}
                           onChange={(e) => setNumberOfGuests(Number.parseInt(e.target.value) || 1)}
                           min={1}
-                          max={selectedVilla.capacity}
+                          max={selectedResort.capacity}
                           className="w-full px-4 py-3 border border-input rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-ring"
                         />
                       </div>
-                      {numberOfGuests > selectedVilla.capacity && (
+                      {numberOfGuests > selectedResort.capacity && (
                         <p className="text-sm text-destructive">
-                          This villa can accommodate up to {selectedVilla.capacity} guests.
+                          This resort can accommodate up to {selectedResort.capacity} guests.
                         </p>
                       )}
                     </CardContent>
@@ -348,13 +347,13 @@ export default function BookingPage() {
                       <div className="bg-muted p-4 rounded-lg space-y-2">
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">
-                            ${selectedVilla.pricePerNight} × {nights} nights
+                            ₱{selectedResort.pricePerNight.toLocaleString()} × {nights} nights
                           </span>
-                          <span>${selectedVilla.pricePerNight * nights}</span>
+                          <span>₱{(selectedResort.pricePerNight * nights).toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between font-semibold text-lg pt-2 border-t border-border">
                           <span>Total</span>
-                          <span>${totalPrice}</span>
+                          <span>₱{totalPrice.toLocaleString()}</span>
                         </div>
                       </div>
                       <p className="text-sm text-muted-foreground">
@@ -424,25 +423,25 @@ export default function BookingPage() {
             )}
           </div>
 
-          {/* Sidebar - Villa Summary */}
+          {/* Sidebar - Resort Summary */}
           {currentStep !== "confirmation" && (
             <div className="lg:col-span-1">
               <div className="sticky top-24">
                 <Card>
                   <div className="relative h-48 w-full">
                     <Image
-                      src={selectedVilla.images[0] || "/placeholder.svg"}
-                      alt={selectedVilla.name}
+                      src={selectedResort.images[0] || "/placeholder.svg"}
+                      alt={selectedResort.name}
                       fill
                       className="object-cover rounded-t-lg"
                     />
                   </div>
                   <CardContent className="p-6 space-y-4">
-                    <h3 className="font-serif text-xl font-semibold">{selectedVilla.name}</h3>
+                    <h3 className="font-serif text-xl font-semibold">{selectedResort.name}</h3>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Price per night</span>
-                        <span className="font-medium">${selectedVilla.pricePerNight}</span>
+                        <span className="font-medium">₱{selectedResort.pricePerNight.toLocaleString()}</span>
                       </div>
                       {nights > 0 && (
                         <>
@@ -452,7 +451,7 @@ export default function BookingPage() {
                           </div>
                           <div className="flex justify-between pt-2 border-t border-border font-semibold">
                             <span>Total</span>
-                            <span>${totalPrice}</span>
+                            <span>₱{totalPrice.toLocaleString()}</span>
                           </div>
                         </>
                       )}

@@ -21,7 +21,7 @@ export function Header() {
       <nav className="container mx-auto px-4 lg:px-8 py-4 flex items-center justify-between">
         <Link href="/" className="font-serif text-2xl lg:text-3xl font-semibold tracking-tight text-foreground group">
           <motion.span className="inline-block" whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
-            Diora Resort
+            Diora Booking
           </motion.span>
         </Link>
 
@@ -29,7 +29,7 @@ export function Header() {
         <div className="hidden md:flex items-center gap-8">
           {[
             { href: "/", label: "Home" },
-            { href: "/villas", label: "Villas" },
+            { href: "/resorts", label: "Resorts" },
           ].map((link) => (
             <motion.div key={link.href} whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
               <Link
@@ -45,10 +45,10 @@ export function Header() {
             <>
               <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
                 <Link
-                  href={user?.role === "admin" ? "/admin" : "/dashboard"}
+                  href={user?.role === "head_admin" ? "/head-admin" : user?.role === "admin" ? "/admin" : "/dashboard"}
                   className="text-sm font-medium hover:text-primary transition-colors relative group"
                 >
-                  {user?.role === "admin" ? "Admin" : "Dashboard"}
+                  {user?.role === "head_admin" ? "Head Admin" : user?.role === "admin" ? "Admin" : "Dashboard"}
                   <motion.span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />
                 </Link>
               </motion.div>
@@ -128,7 +128,7 @@ export function Header() {
             >
               {[
                 { href: "/", label: "Home" },
-                { href: "/villas", label: "Villas" },
+                { href: "/resorts", label: "Resorts" },
               ].map((link) => (
                 <motion.div
                   key={link.href}
@@ -155,11 +155,13 @@ export function Header() {
                     }}
                   >
                     <Link
-                      href={user?.role === "admin" ? "/admin" : "/dashboard"}
+                      href={
+                        user?.role === "head_admin" ? "/head-admin" : user?.role === "admin" ? "/admin" : "/dashboard"
+                      }
                       onClick={() => setMobileMenuOpen(false)}
                       className="text-sm font-medium hover:text-primary transition-colors block"
                     >
-                      {user?.role === "admin" ? "Admin" : "Dashboard"}
+                      {user?.role === "head_admin" ? "Head Admin" : user?.role === "admin" ? "Admin" : "Dashboard"}
                     </Link>
                   </motion.div>
                   <motion.div

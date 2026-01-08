@@ -38,7 +38,7 @@ export function Footer() {
             <h4 className="font-semibold mb-4 text-sm">Contact</h4>
             <ul className="space-y-3">
               <li className="text-sm text-muted-foreground">+47 459 19 494</li>
-              <li className="text-sm text-muted-foreground">williambdyb@outlook.com</li>
+              <li className="text-sm text-muted-foreground">Williambdyb@outlook.com</li>
               <li className="text-sm text-muted-foreground">Paradise Island</li>
             </ul>
           </div>

@@ -2,12 +2,13 @@
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 
-export type UserRole = "guest" | "admin" | null
+export type UserRole = "guest" | "admin" | "head_admin" | null
 
 export interface User {
   email: string
   role: UserRole
   name: string
+  resortIds?: string[] // For admin users - which resorts they manage
 }
 
 interface AuthContextType {
@@ -21,7 +22,33 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 const MOCK_USERS = [
   { email: "guest@demo.com", password: "demo123", role: "guest" as UserRole, name: "Guest User" },
-  { email: "admin@demo.com", password: "admin123", role: "admin" as UserRole, name: "Admin User" },
+  {
+    email: "admin@malumpati.com",
+    password: "admin123",
+    role: "admin" as UserRole,
+    name: "Malumpati Admin",
+    resortIds: ["1"],
+  },
+  {
+    email: "admin@seco.com",
+    password: "admin123",
+    role: "admin" as UserRole,
+    name: "Seco Island Admin",
+    resortIds: ["2"],
+  },
+  {
+    email: "admin@nogas.com",
+    password: "admin123",
+    role: "admin" as UserRole,
+    name: "Nogas Island Admin",
+    resortIds: ["3"],
+  },
+  {
+    email: "headadmin@diora.com",
+    password: "head123",
+    role: "head_admin" as UserRole,
+    name: "Head Administrator",
+  },
 ]
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -38,7 +65,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string): Promise<boolean> => {
     const foundUser = MOCK_USERS.find((u) => u.email === email && u.password === password)
     if (foundUser) {
-      const userData = { email: foundUser.email, role: foundUser.role, name: foundUser.name }
+      const userData: User = {
+        email: foundUser.email,
+        role: foundUser.role,
+        name: foundUser.name,
+        resortIds: foundUser.resortIds,
+      }
       setUser(userData)
       localStorage.setItem("diora_user", JSON.stringify(userData))
       return true
